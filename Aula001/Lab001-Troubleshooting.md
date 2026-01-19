@@ -406,7 +406,7 @@ sudo journalctl -u nginx.service --since "10 minutes ago"
 - Logs de erro específicos
 - Passos já tentados
 
->[NOTA]
+> [!NOTE]
 > **Desenvolvido por:** Professor Alexandre Tavares - UniFAAT  
 > **Versão:** 1.0 - Semestre 2026.1  
 > **Última atualização:** Janeiro 2025
