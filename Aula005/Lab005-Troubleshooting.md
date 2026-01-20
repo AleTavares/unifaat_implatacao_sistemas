@@ -2,10 +2,7 @@
 
 **Lab:** 005 - AWS CLI e IAM  
 **Foco:** Configuração AWS, credenciais, permissões
-
----
-
-## 🚨 Problemas Mais Comuns
+## Problemas Mais Comuns
 
 ### 1. AWS CLI não Configurado
 
@@ -102,6 +99,44 @@ export AWS_SECRET_ACCESS_KEY=temp-secret
 export AWS_SESSION_TOKEN=temp-token
 ```
 
----
+### Container sempre unhealthy
 
-**Desenvolvido por:** Professor Alexandre Tavares - UniFAAT
+**Problema:** Healthcheck sempre falha  
+**Solução:** Verificar se comando funciona manualmente
+
+```bash
+# Testar comando dentro do container
+docker exec web-app curl -f http://localhost
+```
+
+### Dependência não funciona
+
+**Problema:** Web inicia mesmo com DB unhealthy  
+**Solução:** Verificar sintaxe do depends_on
+
+```yaml
+# ✅ CORRETO
+depends_on:
+  db:
+    condition: service_healthy
+
+# ❌ ERRADO
+depends_on:
+  - db:
+      condition: service_healthy
+```
+
+### Grace period muito curto
+
+**Problema:** Container marcado como unhealthy muito cedo  
+**Solução:** Aumentar start_period
+
+```yaml
+healthcheck:
+  start_period: 120s  # Aumentar para aplicações lentas
+```
+
+> [!NOTE]
+> **Desenvolvido por:** Professor Alexandre Tavares - UniFAAT  
+> **Versão:** 1.0 - Semestre 2026.1  
+> **Última atualização:** Janeiro 2025
