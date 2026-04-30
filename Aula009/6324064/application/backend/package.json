@@ -1,0 +1,16 @@
+{
+  "name": "tf09-portfolio-backend",
+  "version": "1.0.0",
+  "description": "API REST do portfólio pessoal para o TF09",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.3",
+    "mysql2": "^3.9.2",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0"
+  }
+}
