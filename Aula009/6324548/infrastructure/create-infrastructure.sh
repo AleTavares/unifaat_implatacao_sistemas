@@ -43,12 +43,18 @@ echo "Criando Security Groups..."
 WEB_SG_ID=$(aws ec2 create-security-group --group-name "web-sg" --description "Permitir HTTP e SSH" --vpc-id $VPC_ID --query 'GroupId' --output text --region $REGION)
 aws ec2 create-tags --resources $WEB_SG_ID --tags Key=Name,Value=$PROJECT_TAG-Web-SG --region $REGION
 
+DB_SG_ID=$(aws ec2 create-security-group --group-name "db-sg" --description "Database SG Restrito ao Web SG" --vpc-id $VPC_ID --query 'GroupId' --output text --region $REGION)
+aws ec2 create-tags --resources $DB_SG_ID --tags Key=Name,Value=$PROJECT_TAG-DB-SG --region $REGION
+
 # Regras de Ingress SG
 MY_IP=$(curl -s http://checkip.amazonaws.com)/32
 echo "Restringindo SSH para o IP: $MY_IP"
 aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --port 80 --cidr 0.0.0.0/0 --region $REGION
 aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --port 3000 --cidr 0.0.0.0/0 --region $REGION
 aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --port 22 --cidr $MY_IP --region $REGION
+
+# Regra Menor Privilégio: DB SG só aceita acesso vindo do Web SG na porta do banco
+aws ec2 authorize-security-group-ingress --group-id $DB_SG_ID --protocol tcp --port 5432 --source-group $WEB_SG_ID --region $REGION
 
 # 6. Key Pair
 echo "Gerando KeyPair..."
