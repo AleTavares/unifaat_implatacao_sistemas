@@ -36,6 +36,15 @@ if [ "$IGW_ID" != "None" ] && [ -n "$IGW_ID" ]; then
     aws ec2 delete-internet-gateway --internet-gateway-id $IGW_ID --region $REGION
 fi
 
+# Remover Route Tables Customizadas atreladas a VPC
+RTS=$(aws ec2 describe-route-tables --filters "Name=vpc-id,Values=$VPC_ID" --query "RouteTables[?Associations[0].Main!=\`true\`].RouteTableId" --output text --region $REGION)
+for rt in $RTS; do
+    if [ "$rt" != "None" ] && [ -n "$rt" ]; then
+        echo "Excluindo Route Table Customizada: $rt"
+        aws ec2 delete-route-table --route-table-id $rt --region $REGION
+    fi
+done
+
 SUBNETS=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$VPC_ID" --query "Subnets[*].SubnetId" --output text --region $REGION)
 for subnet in $SUBNETS; do
     echo "Excluindo Subnet: $subnet"
