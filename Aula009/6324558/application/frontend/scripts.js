@@ -56,7 +56,7 @@ async function fetchProjects() {
 }
 
 async function fetchExperiences() {
-    const res = await fetch(`${apiBase}/experiences`); // Note: Rota igual ao seu init.sql
+    const res = await fetch(`${apiBase}/skills`); // Note: Rota igual ao seu init.sql
     const experiences = await res.json();
     const container = document.getElementById('experience-list');
     container.innerHTML = experiences.map(e => `

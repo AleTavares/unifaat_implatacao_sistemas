@@ -1,10 +1,12 @@
 import express from 'express';
 import { Pool } from 'pg';
+import cors from 'cors';
+
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
-// Função auxiliar para Logs Estruturados (Exigência do Item 3)
 const logger = (level, message, context = {}) => {
     const log = {
         timestamp: new Date().toISOString(),
@@ -23,19 +25,13 @@ const pool = new Pool({
     port: 5432,
 });
 
-// Requisito: Health Check
-app.get('/health', async (req, res) => {
-    try {
-        await pool.query('SELECT 1');
-        logger('info', 'Health check executado com sucesso');
-        res.status(200).json({ status: 'OK', database: 'Connected' });
-    } catch (err) {
-        logger('error', 'Health check falhou', { error: err.message });
-        res.status(500).json({ status: 'Error', database: err.message });
-    }
+
+app.get('/api/health', (req, res) => {
+    logger('info', 'Health check executado com sucesso');
+    res.status(200).json({ status: 'OK' });
 });
 
-// CRUD: Projetos
+
 app.get('/api/projects', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM projects ORDER BY id DESC');
@@ -62,7 +58,6 @@ app.post('/api/projects', async (req, res) => {
     }
 });
 
-// REQUISITO: Seção de experiências/habilidades
 app.get('/api/skills', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM skills');
