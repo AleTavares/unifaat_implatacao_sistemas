@@ -1,5 +1,5 @@
 # TF09 - Portfólio Cloud AWS
-**Autor:** Giovanna | **RA:** 6324089
+**Autor:** Giovanna Sabino | **RA:** 6324089
 
 ## Descrição do Projeto
 Este repositório contém a infraestrutura como código (IaC via shell scripts) e a aplicação containerizada de um portfólio pessoal, implantado na nuvem pública AWS. O projeto comprova o domínio em provisionamento de redes (VPC), configuração de instâncias (EC2), regras de firewall (Security Groups) e orquestração de containers (Docker).

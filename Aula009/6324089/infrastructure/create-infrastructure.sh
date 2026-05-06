@@ -1,7 +1,7 @@
 #!/bin/bash
 # Automação de infraestrutura para o TF09
 
-echo "🚀 Iniciando criação da infraestrutura..."
+echo "Iniciando criação da infraestrutura..."
 
 # 1. VPC e Rede
 VPC_ID=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --query 'Vpc.VpcId' --output text)
@@ -28,4 +28,4 @@ aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --
 aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --port 80 --cidr 0.0.0.0/0
 aws ec2 authorize-security-group-ingress --group-id $WEB_SG_ID --protocol tcp --port 3000 --cidr 0.0.0.0/0
 
-echo "✅ Infraestrutura básica pronta. Salve esses IDs para o cleanup!"
+echo "Infraestrutura básica pronta. Salve esses IDs para o cleanup!"

@@ -22,9 +22,8 @@ app.get('/health', (req, res) => {
 app.get('/api/projects', async (req, res) => {
   // Aqui você pode retornar dados do MySQL ou um JSON estático para teste inicial
   res.json([
-    { id: 1, title: "Agenda Financeira", tech: "Node.js & Docker" },
-    { id: 2, title: "Infra AWS EC2", tech: "AWS CLI" },
-    { id: 3, title: "Sistema de Gerenciamento Escolar", tech: "Javascript & Node.js" }
+    { id: 1, title: "Automação Arknights", tech: "Node.js & Docker" },
+    { id: 2, title: "Infra AWS EC2", tech: "AWS CLI" }
   ]);
 });
 
