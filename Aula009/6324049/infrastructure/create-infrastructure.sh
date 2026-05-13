@@ -3,6 +3,8 @@
 # Aluno: Danilo Lenardi de Almeida
 # RA: 6324049
 
+set -e
+
 echo "=== Criando infraestrutura TF09 ==="
 
 # Variaveis
@@ -59,14 +61,42 @@ echo "SG Database criado: $SG_DB_ID"
 
 # Key Pair
 echo "[7/8] Criando Key Pair..."
-aws ec2 create-key-pair --key-name TF09-KeyPair --query "KeyMaterial" --output text --region $REGION > TF09-KeyPair.pem
+
+rm -f TF09-KeyPair.pem
+
+aws ec2 create-key-pair \
+--key-name TF09-KeyPair \
+--query "KeyMaterial" \
+--output text \
+--region $REGION > ./TF09-KeyPair.pem
+
 chmod 400 TF09-KeyPair.pem
+
 echo "Key Pair criada: TF09-KeyPair.pem"
 
 # EC2
 echo "[8/8] Criando instancia EC2..."
-AMI_ID=$(aws ec2 describe-images --owners 099720109477 --filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*" "Name=state,Values=available" --query "sort_by(Images, &CreationDate)[-1].ImageId" --output text --region $REGION)
-INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --key-name TF09-KeyPair --security-group-ids $SG_WEB_ID --subnet-id $PUBLIC_SUBNET_ID --associate-public-ip-address --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=TF09-EC2}]' --query "Instances[0].InstanceId" --output text --region $REGION)
+
+AMI_ID=$(aws ec2 describe-images \
+--owners 099720109477 \
+--filters "Name=name,Values=ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*" "Name=state,Values=available" \
+--query "sort_by(Images, &CreationDate)[-1].ImageId" \
+--output text \
+--region $REGION)
+
+INSTANCE_ID=$(aws ec2 run-instances \
+--image-id $AMI_ID \
+--instance-type t3.micro \
+--key-name TF09-KeyPair \
+--security-group-ids $SG_WEB_ID \
+--subnet-id $PUBLIC_SUBNET_ID \
+--associate-public-ip-address \
+--user-data file://$(pwd)/user-data.sh \
+--tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=TF09-EC2}]' \
+--query "Instances[0].InstanceId" \
+--output text \
+--region $REGION)
+
 echo "EC2 criada: $INSTANCE_ID"
 
 echo ""
@@ -79,3 +109,17 @@ echo "Route Table: $RT_ID"
 echo "SG Web: $SG_WEB_ID"
 echo "SG Database: $SG_DB_ID"
 echo "EC2: $INSTANCE_ID"
+
+echo "IP Publico da EC2: $PUBLIC_IP"
+
+cat > infra_ids.sh <<EOF
+REGION="$REGION"
+VPC_ID="$VPC_ID"
+INSTANCE_ID="$INSTANCE_ID"
+IGW_ID="$IGW_ID"
+PUBLIC_SUBNET_ID="$PUBLIC_SUBNET_ID"
+PRIVATE_SUBNET_ID="$PRIVATE_SUBNET_ID"
+RT_ID="$RT_ID"
+SG_WEB_ID="$SG_WEB_ID"
+SG_DB_ID="$SG_DB_ID"
+EOF
