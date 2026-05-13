@@ -29,14 +29,14 @@ A aplicação é um portfólio pessoal com frontend em Nginx e backend em Python
 ### Recursos de Rede
 | Recurso | ID |
 |---------|-----|
-| VPC | vpc-07c7c0923d6c3e926 |
-| Subnet Pública | subnet-038979d8918bc203e |
-| Subnet Privada | subnet-0871b81f0aff74b1b |
-| Internet Gateway | igw-08c3940a2775ff4af |
-| Route Table | rtb-0f3203e98dbfc3ec4 |
+| VPC | vpc-ID |
+| Subnet Pública | subnet-ID |
+| Subnet Privada | subnet-ID |
+| Internet Gateway | igw-ID |
+| Route Table | rtb-ID |
 
 ### Routing
-- **Public Route Table:** 0.0.0.0/0 → igw-08c3940a2775ff4af
+- **Public Route Table:** 0.0.0.0/0 → igw-ID
 - **Private Route Table:** Apenas tráfego local (10.0.0.0/16)
 
 ---
@@ -56,7 +56,7 @@ A aplicação é um portfólio pessoal com frontend em Nginx e backend em Python
 #### TF09-SG-Database (sg-01e9afcd38989916d)
 | Porta | Protocolo | Origem | Descrição |
 |-------|-----------|--------|-----------|
-| 5432 | TCP | sg-0c2436eecf9ba66f2 | PostgreSQL só pelo EC2 |
+| 5432 | TCP | sg-ID| PostgreSQL só pelo EC2 |
 
 ### Medidas de Segurança
 - ✅ VPC isolada com subnets pública e privada
@@ -71,10 +71,10 @@ A aplicação é um portfólio pessoal com frontend em Nginx e backend em Python
 
 | Recurso | Valor |
 |---------|-------|
-| Instance ID | i-014f28246843ebc83 |
+| Instance ID | i-ID |
 | Tipo | t3.micro (Free Tier) |
 | AMI | Ubuntu 20.04 LTS |
-| IP Público | 18.206.148.26 |
+| IP Público | Variavel |
 | Region | us-east-1 |
 
 ---
@@ -101,23 +101,103 @@ A aplicação é um portfólio pessoal com frontend em Nginx e backend em Python
 
 ### Deploy
 ```bash
-# 1. Criar infraestrutura
+# Clonar o Repositório 
+
+git clone https://github.com/Danilo8922/unifaat_implatacao_sistemas.git
+
+# Acessar a pasta do projeto
+
+cd unifaat_implatacao_sistemas
+
+# Entra na pasta da aula
+
+cd Aula009
+
+# Entra na pasta do projeto 
+
+cd 6324049
+
+# entre na pasta para subir a infraestrutura
+
 cd infrastructure
-chmod +x create-infrastructure.sh
+
+# Permissões para a executar os scripts
+
+chmod +x cleanup-infrastructure.sh create-infrastructure.sh
+
+# Depois execute:
+
 ./create-infrastructure.sh
 
-# 2. Conectar no EC2
-ssh -i TF09-KeyPair.pem ubuntu@18.206.148.26
+# Para subir a aplicação toda depois que terminar de subir a Instancia vamos descobrir  IP puplico dela, para executar o proximo comando e acessar a pagina: 
 
-# 3. Subir aplicação
-cd ~/TF09
-sudo docker-compose up -d --build
-```
+aws ec2 describe-instances \
+--query "Reservations[*].Instances[*].[InstanceId,PublicIpAddress]" \
+--output table \
+--region us-east-1
+
+# Ira aparecer algo assim 
+
+#------------------------------------------------
+#|              DescribeInstances               |
+#+----------------------+-----------------------+
+#|  i-0bd10da35d82840e1 |  IP-PUBLICO AQUI       |
+#+----------------------+-----------------------+
+
+# Depois rode o comando 
+
+ssh -i TF09-KeyPair.pem ubuntu@IP_PUBLICO
+
+# Dentro do servidor execute os seguintes comandos 
+
+# Atualiza sistema
+sudo apt update -y
+sudo apt upgrade -y
+
+# Instala dependencias
+sudo apt install -y \
+git \
+docker.io \
+docker-compose
+
+# Inicia docker
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Adiciona ubuntu ao grupo docker
+usermod -aG docker ubuntu
+
+# Vai para home
+cd /home/ubuntu
+
+# Clona repositorio
+git clone https://github.com/Danilo8922/unifaat_implatacao_sistemas.git
+
+# Entra na pasta do projeto
+cd unifaat_implatacao_sistemas
+
+# Entra na pasta da aula
+
+cd Aula009
+
+# Entra na pasta do projeto 
+
+cd 6324049
+
+cd application
+
+sudo usermod -aG docker ubuntu
+
+newgrp docker
+
+# Sobe containers
+docker-compose up --build -d
+
 
 ### Verificação
-- **Site:** http://18.206.148.26
-- **Health Check:** http://18.206.148.26:5000/health
-- **API Projetos:** http://18.206.148.26:5000/api/projects
+- **Site:** http://IP_PULICO:80
+- **Health Check:** http://IP_PULICO:5000/health
+- **API Projetos:** http://IP_PULICO:5000/api/projects
 
 ---
 
