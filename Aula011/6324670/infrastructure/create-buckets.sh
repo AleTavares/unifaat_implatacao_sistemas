@@ -1,0 +1,158 @@
+#!/bin/bash
+
+# ============================================
+# AWS S3 Portfolio - Create Buckets Script
+# ============================================
+
+set -e
+
+echo "================================================"
+echo "Creating S3 Buckets for Portfolio"
+echo "================================================"
+
+# Configuration
+REGION="us-east-1"
+WEBSITE_BUCKET="portfolio-website-$(date +%s)"
+ASSETS_BUCKET="portfolio-assets-$(date +%s)"
+
+echo "Region: $REGION"
+echo "Website Bucket: $WEBSITE_BUCKET"
+echo "Assets Bucket: $ASSETS_BUCKET"
+
+# Create Website Bucket
+echo ""
+echo "Creating website bucket..."
+aws s3api create-bucket \
+    --bucket $WEBSITE_BUCKET \
+    --region $REGION
+
+# Enable versioning on website bucket
+echo "Enabling versioning on website bucket..."
+aws s3api put-bucket-versioning \
+    --bucket $WEBSITE_BUCKET \
+    --versioning-configuration Status=Enabled
+
+# Create Assets Bucket
+echo ""
+echo "Creating assets bucket..."
+aws s3api create-bucket \
+    --bucket $ASSETS_BUCKET \
+    --region $REGION
+
+# Enable versioning on assets bucket
+echo "Enabling versioning on assets bucket..."
+aws s3api put-bucket-versioning \
+    --bucket $ASSETS_BUCKET \
+    --versioning-configuration Status=Enabled
+
+# Block public access on website bucket
+echo ""
+echo "Configuring public access for website bucket..."
+aws s3api put-public-access-block \
+    --bucket $WEBSITE_BUCKET \
+    --public-access-block-configuration \
+    "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+# Block public access on assets bucket
+echo "Configuring public access for assets bucket..."
+aws s3api put-public-access-block \
+    --bucket $ASSETS_BUCKET \
+    --public-access-block-configuration \
+    "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+# Enable static website hosting
+echo ""
+echo "Configuring static website hosting..."
+aws s3api put-bucket-website \
+    --bucket $WEBSITE_BUCKET \
+    --website-configuration '{
+        "IndexDocument": {
+            "Suffix": "index.html"
+        },
+        "ErrorDocument": {
+            "Key": "error.html"
+        }
+    }'
+
+# Enable CORS on assets bucket
+echo "Configuring CORS..."
+aws s3api put-bucket-cors \
+    --bucket $ASSETS_BUCKET \
+    --cors-configuration '{
+        "CORSRules": [
+            {
+                "AllowedHeaders": ["*"],
+                "AllowedMethods": ["GET", "HEAD"],
+                "AllowedOrigins": ["*"],
+                "MaxAgeSeconds": 3000
+            }
+        ]
+    }'
+
+# Enable logging
+echo ""
+echo "Configuring access logging..."
+
+# Create logging bucket
+LOGGING_BUCKET="portfolio-logs-$(date +%s)"
+aws s3api create-bucket \
+    --bucket $LOGGING_BUCKET \
+    --region $REGION
+
+# Enable logging on website bucket
+aws s3api put-bucket-logging \
+    --bucket $WEBSITE_BUCKET \
+    --bucket-logging-status '{
+        "LoggingEnabled": {
+            "TargetBucket": "'$LOGGING_BUCKET'",
+            "TargetPrefix": "website-logs/"
+        }
+    }'
+
+# Enable logging on assets bucket
+aws s3api put-bucket-logging \
+    --bucket $ASSETS_BUCKET \
+    --bucket-logging-status '{
+        "LoggingEnabled": {
+            "TargetBucket": "'$LOGGING_BUCKET'",
+            "TargetPrefix": "assets-logs/"
+        }
+    }'
+
+# Configure lifecycle policies for logs
+echo "Configuring lifecycle policies..."
+aws s3api put-bucket-lifecycle-configuration \
+    --bucket $LOGGING_BUCKET \
+    --lifecycle-configuration '{
+        "Rules": [
+            {
+                "Id": "DeleteOldLogs",
+                "Status": "Enabled",
+                "Expiration": {"Days": 90},
+                "Filter": {"Prefix": ""}
+            }
+        ]
+    }'
+
+# Save bucket names to file
+echo ""
+echo "Saving configuration..."
+cat > bucket-config.env << EOF
+WEBSITE_BUCKET=$WEBSITE_BUCKET
+ASSETS_BUCKET=$ASSETS_BUCKET
+LOGGING_BUCKET=$LOGGING_BUCKET
+REGION=$REGION
+WEBSITE_ENDPOINT=http://$WEBSITE_BUCKET.s3-website-$REGION.amazonaws.com
+EOF
+
+echo "Configuration saved to bucket-config.env"
+echo ""
+echo "================================================"
+echo "✓ Buckets created successfully!"
+echo "================================================"
+echo ""
+echo "Next steps:"
+echo "1. Upload website files to: $WEBSITE_BUCKET"
+echo "2. Configure CloudFront with: $WEBSITE_BUCKET"
+echo "3. Setup policies with: create-policies.sh"
+echo ""

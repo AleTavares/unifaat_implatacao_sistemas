@@ -1,0 +1,50 @@
+// ============================================
+// PROJECTS FILTER - Projetos Page
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeProjectsFilter();
+});
+
+function initializeProjectsFilter() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            // Filter projects
+            const filterValue = this.getAttribute('data-filter');
+            filterProjects(filterValue, projectCards);
+        });
+    });
+}
+
+function filterProjects(filter, projectCards) {
+    projectCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        
+        // Add animation
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.8)';
+        
+        setTimeout(() => {
+            if (filter === 'all' || category === filter) {
+                card.style.display = 'block';
+                // Trigger animation
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.transform = 'scale(1)';
+                }, 10);
+            } else {
+                card.style.display = 'none';
+            }
+        }, 150);
+    });
+}
+
+console.log('✓ Projects filter loaded');

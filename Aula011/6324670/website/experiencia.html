@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Experiência profissional - Portfólio">
+    <meta name="keywords" content="experiência, carreira, desenvolvedor">
+    <title>Experiência - Portfólio Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">P</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Início</a></li>
+                <li><a href="projetos.html" class="nav-link">Projetos</a></li>
+                <li><a href="experiencia.html" class="nav-link active">Experiência</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Experience Section -->
+    <section class="experience">
+        <div class="container">
+            <h1>Experiência Profissional</h1>
+            <p class="section-subtitle">Minha trajetória profissional e acadêmica</p>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <!-- Experience 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Senior Full Stack Developer</h3>
+                            <span class="timeline-date">Jan 2023 - Presente</span>
+                        </div>
+                        <p class="timeline-company">Tech Solutions Brasil</p>
+                        <p class="timeline-description">
+                            Liderança técnica em projetos cloud-native na AWS, arquitetura de microserviços, 
+                            otimização de performance e mentoria de desenvolvedores juniores.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">AWS</span>
+                            <span class="tag">Kubernetes</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">React</span>
+                            <span class="tag">Leadership</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Full Stack Developer</h3>
+                            <span class="timeline-date">Jun 2021 - Dez 2022</span>
+                        </div>
+                        <p class="timeline-company">Digital Innovations Co.</p>
+                        <p class="timeline-description">
+                            Desenvolvimento de aplicações web escaláveis, implementação de CI/CD pipelines, 
+                            otimização de performance e integração com diversos serviços AWS.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">Node.js</span>
+                            <span class="tag">React</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">AWS Lambda</span>
+                            <span class="tag">Docker</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Frontend Developer</h3>
+                            <span class="timeline-date">Jan 2020 - Mai 2021</span>
+                        </div>
+                        <p class="timeline-company">Web Design Studio</p>
+                        <p class="timeline-description">
+                            Desenvolvimento de interfaces responsivas, implementação de design systems, 
+                            otimização de UX e performance frontend com foco em acessibilidade.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">UX/UI</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Experience 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Junior Developer</h3>
+                            <span class="timeline-date">Jul 2019 - Dez 2019</span>
+                        </div>
+                        <p class="timeline-company">StartUp Tech Brasil</p>
+                        <p class="timeline-description">
+                            Primeiro contato com desenvolvimento profissional, trabalho em equipe ágil, 
+                            aprendizado prático de tecnologias web e boas práticas de código.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">React</span>
+                            <span class="tag">APIs</span>
+                            <span class="tag">Git</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education 1 -->
+                <div class="timeline-item education">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Bootcamp Full Stack Developer</h3>
+                            <span class="timeline-date">2019</span>
+                        </div>
+                        <p class="timeline-company">Coding Academy Brasil</p>
+                        <p class="timeline-description">
+                            Formação intensiva em desenvolvimento full stack com foco em JavaScript, 
+                            React, Node.js e práticas de desenvolvimento profissional.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">Full Stack</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">Agile</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education 2 -->
+                <div class="timeline-item education">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Graduação em Análise e Desenvolvimento de Sistemas</h3>
+                            <span class="timeline-date">2016 - 2018</span>
+                        </div>
+                        <p class="timeline-company">Universidade Federal de São Paulo</p>
+                        <p class="timeline-description">
+                            Formação acadêmica em desenvolvimento de sistemas com ênfase em engenharia de software, 
+                            banco de dados e programação orientada a objetos.
+                        </p>
+                        <div class="timeline-tags">
+                            <span class="tag">Backend</span>
+                            <span class="tag">Databases</span>
+                            <span class="tag">Algorithms</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications -->
+    <section class="certifications">
+        <div class="container">
+            <h2>Certificações</h2>
+            <div class="certifications-grid">
+                <div class="cert-card">
+                    <h4>AWS Certified Solutions Architect</h4>
+                    <p class="cert-issuer">Amazon Web Services</p>
+                    <p class="cert-date">2023</p>
+                </div>
+                <div class="cert-card">
+                    <h4>AWS Certified Developer Associate</h4>
+                    <p class="cert-issuer">Amazon Web Services</p>
+                    <p class="cert-date">2022</p>
+                </div>
+                <div class="cert-card">
+                    <h4>Kubernetes Administrator</h4>
+                    <p class="cert-issuer">Cloud Native Computing Foundation</p>
+                    <p class="cert-date">2023</p>
+                </div>
+                <div class="cert-card">
+                    <h4>Professional Scrum Master</h4>
+                    <p class="cert-issuer">Scrum.org</p>
+                    <p class="cert-date">2022</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html">Projetos</a></li>
+                    <li><a href="experiencia.html">Experiência</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conecte-se</h4>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informações</h4>
+                <p>Email: seu.email@exemplo.com</p>
+                <p>Local: São Paulo, Brasil</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Seu Nome. Todos os direitos reservados. | Hospedado em AWS S3 + CloudFront</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+</body>
+</html>

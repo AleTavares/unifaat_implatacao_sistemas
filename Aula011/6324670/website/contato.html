@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entre em contato - Portfólio Profissional">
+    <meta name="keywords" content="contato, email, formulário">
+    <title>Contato - Portfólio Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">P</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Início</a></li>
+                <li><a href="projetos.html" class="nav-link">Projetos</a></li>
+                <li><a href="experiencia.html" class="nav-link">Experiência</a></li>
+                <li><a href="contato.html" class="nav-link active">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h1>Entre em Contato</h1>
+            <p class="section-subtitle">Sempre aberto a novas oportunidades e conversas interessantes</p>
+
+            <div class="contact-wrapper">
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <h2>Envie uma Mensagem</h2>
+                    <form id="contactForm" class="contact-form" method="POST">
+                        <div class="form-group">
+                            <label for="name">Nome Completo *</label>
+                            <input type="text" id="name" name="name" required>
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Telefone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Assunto *</label>
+                            <input type="text" id="subject" name="subject" required>
+                            <span class="error-message" id="subjectError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="category">Categoria *</label>
+                            <select id="category" name="category" required>
+                                <option value="">Selecione uma categoria</option>
+                                <option value="opportunity">Oportunidade de Trabalho</option>
+                                <option value="project">Novo Projeto</option>
+                                <option value="collaboration">Colaboração</option>
+                                <option value="general">Geral</option>
+                                <option value="other">Outro</option>
+                            </select>
+                            <span class="error-message" id="categoryError"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Mensagem *</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                            <span class="error-message" id="messageError"></span>
+                        </div>
+
+                        <div class="form-group checkbox">
+                            <input type="checkbox" id="consent" name="consent" required>
+                            <label for="consent">Concordo em ser contatado e que meus dados sejam utilizados para responder minha mensagem *</label>
+                            <span class="error-message" id="consentError"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-large">Enviar Mensagem</button>
+                        <p id="formMessage" class="form-message"></p>
+                    </form>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h2>Informações de Contato</h2>
+                    
+                    <div class="info-item">
+                        <h3>Email</h3>
+                        <p><a href="mailto:seu.email@exemplo.com">seu.email@exemplo.com</a></p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>Localização</h3>
+                        <p>São Paulo, SP<br>Brasil</p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>Telefone</h3>
+                        <p><a href="tel:+5511999999999">+55 (11) 9999-9999</a></p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>Redes Sociais</h3>
+                        <div class="social-links-contact">
+                            <a href="#" class="social-link">LinkedIn</a>
+                            <a href="#" class="social-link">GitHub</a>
+                            <a href="#" class="social-link">Twitter</a>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>Horário de Atendimento</h3>
+                        <p>Segunda a Sexta: 09:00 - 18:00<br>Sábado e Domingo: Respondo assim que possível</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq">
+        <div class="container">
+            <h2>Perguntas Frequentes</h2>
+            <div class="faq-items">
+                <div class="faq-item">
+                    <h3>Qual é o seu tempo de resposta?</h3>
+                    <p>Respondo todos os emails no máximo em 24-48 horas úteis. Para dúvidas urgentes, pode também entrar em contato via telefone.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Você trabalha com freelancers?</h3>
+                    <p>Sim, estou aberto a oportunidades de freelance, consultoria e projetos pontuais. Vamos conversar sobre seu projeto!</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Qual é sua taxa de projeto?</h3>
+                    <p>As taxas variam conforme o escopo, complexidade e timeline do projeto. Após a conversa inicial, faço um orçamento personalizado.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Você oferece suporte pós-projeto?</h3>
+                    <p>Sim, ofereço suporte técnico, manutenção e evoluções dos projetos desenvolvidos. Podemos estruturar um plano conforme sua necessidade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html">Projetos</a></li>
+                    <li><a href="experiencia.html">Experiência</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conecte-se</h4>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informações</h4>
+                <p>Email: seu.email@exemplo.com</p>
+                <p>Local: São Paulo, Brasil</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Seu Nome. Todos os direitos reservados. | Hospedado em AWS S3 + CloudFront</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+    <script src="js/contact-form.js" defer></script>
+</body>
+</html>

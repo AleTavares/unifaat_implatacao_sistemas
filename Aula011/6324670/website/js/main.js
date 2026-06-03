@@ -1,0 +1,256 @@
+// ============================================
+// MAIN JAVASCRIPT - Navigation & General
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeNavigation();
+    initializeLazyLoading();
+    trackPagePerformance();
+});
+
+/**
+ * Initialize Navigation
+ */
+function initializeNavigation() {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    if (hamburger) {
+        hamburger.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.nav-container')) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
+        });
+    }
+
+    // Update active link
+    updateActiveLink();
+    window.addEventListener('load', updateActiveLink);
+}
+
+/**
+ * Update Active Navigation Link
+ */
+function updateActiveLink() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+/**
+ * Lazy Loading for Images
+ */
+function initializeLazyLoading() {
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.add('loaded');
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+}
+
+/**
+ * Track Page Performance
+ */
+function trackPagePerformance() {
+    if (window.performance && window.performance.timing) {
+        window.addEventListener('load', function() {
+            const perfData = window.performance.timing;
+            const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
+            
+            // Log performance metrics
+            console.log('Page Load Time:', pageLoadTime + 'ms');
+            console.log('DOM Content Loaded:', (perfData.domContentLoadedEventEnd - perfData.navigationStart) + 'ms');
+            console.log('DOM Interactive:', (perfData.domInteractive - perfData.navigationStart) + 'ms');
+            
+            // Send to analytics if needed
+            if (window.gtag) {
+                gtag('event', 'page_load_time', {
+                    'value': pageLoadTime,
+                    'event_category': 'engagement'
+                });
+            }
+        });
+    }
+}
+
+/**
+ * Smooth Scroll for Anchor Links
+ */
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+        const href = this.getAttribute('href');
+        if (href !== '#' && document.querySelector(href)) {
+            e.preventDefault();
+            document.querySelector(href).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+/**
+ * Add scroll animations
+ */
+function addScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.project-card, .skill-card, .timeline-item, .cert-card').forEach(el => {
+        observer.observe(el);
+    });
+}
+
+// Initialize scroll animations on page load
+window.addEventListener('load', addScrollAnimations);
+
+/**
+ * Debounce function for resize events
+ */
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+/**
+ * Handle window resize
+ */
+window.addEventListener('resize', debounce(function() {
+    // Reset mobile menu on resize
+    const navMenu = document.querySelector('.nav-menu');
+    const hamburger = document.querySelector('.hamburger');
+    if (window.innerWidth > 768) {
+        navMenu.classList.remove('active');
+        hamburger?.classList.remove('active');
+    }
+}, 250));
+
+/**
+ * Detect browser capabilities
+ */
+function detectBrowserCapabilities() {
+    const capabilities = {
+        webp: false,
+        serviceWorker: 'serviceWorker' in navigator,
+        localStorage: typeof(Storage) !== "undefined",
+        css3: supportsCss3(),
+        intersectionObserver: 'IntersectionObserver' in window
+    };
+
+    // Check WebP support
+    const webP = new Image();
+    webP.onload = webP.onerror = () => {
+        capabilities.webp = (webP.height === 2);
+    };
+    webP.src = "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAAw=";
+
+    return capabilities;
+}
+
+/**
+ * CSS3 Support Detection
+ */
+function supportsCss3() {
+    const div = document.createElement('div');
+    const vendors = ['webkit', 'moz', 'ms', 'o'];
+    
+    const testProps = [
+        'transform',
+        'transition',
+        'animation',
+        'filter',
+        'flexbox'
+    ];
+
+    for (let prop of testProps) {
+        if (div.style[prop] !== undefined) return true;
+        for (let vendor of vendors) {
+            if (div.style[vendor + prop.charAt(0).toUpperCase() + prop.slice(1)] !== undefined) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Store capabilities in window object for later use
+window.browserCapabilities = detectBrowserCapabilities();
+
+/**
+ * Service Worker Registration
+ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        // Only register if service-worker.js exists
+        // navigator.serviceWorker.register('js/service-worker.js')
+        //     .then(reg => console.log('Service Worker registered'))
+        //     .catch(err => console.log('Service Worker registration failed'));
+    });
+}
+
+/**
+ * Polyfill for older browsers
+ */
+if (!Array.prototype.includes) {
+    Array.prototype.includes = function(searchElement) {
+        'use strict';
+        if (this == null) {
+            throw new TypeError('Array.prototype.includes called on null or undefined');
+        }
+        return this.indexOf(searchElement) > -1;
+    };
+}
+
+console.log('✓ Main.js loaded - Portfolio initialized');

@@ -1,0 +1,129 @@
+#!/bin/bash
+
+# ============================================
+# AWS CloudFront - Setup CDN Script
+# ============================================
+
+set -e
+
+echo "================================================"
+echo "Setting up CloudFront Distribution"
+echo "================================================"
+
+# Load bucket configuration
+if [ ! -f "bucket-config.env" ]; then
+    echo "Error: bucket-config.env not found!"
+    echo "Run create-buckets.sh first"
+    exit 1
+fi
+
+source bucket-config.env
+
+# Configuration
+ORIGIN_DOMAIN="$WEBSITE_BUCKET.s3.amazonaws.com"
+DISTRIBUTION_NAME="Portfolio CDN"
+PRICE_CLASS="PriceClass_100"  # US, Europe, Asia
+
+echo "Creating CloudFront distribution for: $ORIGIN_DOMAIN"
+echo ""
+
+# Create distribution
+DISTRIBUTION_CONFIG='{
+    "CallerReference": "'$(date +%s)'",
+    "Comment": "'$DISTRIBUTION_NAME'",
+    "Enabled": true,
+    "DefaultRootObject": "index.html",
+    "PriceClass": "'$PRICE_CLASS'",
+    "Origins": {
+        "Quantity": 1,
+        "Items": [
+            {
+                "Id": "S3Origin",
+                "DomainName": "'$ORIGIN_DOMAIN'",
+                "S3OriginConfig": {
+                    "OriginAccessIdentity": ""
+                }
+            }
+        ]
+    },
+    "DefaultCacheBehavior": {
+        "AllowedMethods": {
+            "Quantity": 2,
+            "Items": ["GET", "HEAD"]
+        },
+        "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+        "TargetOriginId": "S3Origin",
+        "ViewerProtocolPolicy": "redirect-to-https",
+        "Compress": true
+    },
+    "CacheBehaviors": [
+        {
+            "PathPattern": "/images/*",
+            "AllowedMethods": {
+                "Quantity": 2,
+                "Items": ["GET", "HEAD"]
+            },
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "TargetOriginId": "S3Origin",
+            "ViewerProtocolPolicy": "https-only",
+            "Compress": true
+        }
+    ],
+    "ViewerCertificate": {
+        "CloudFrontDefaultCertificate": true
+    }
+}'
+
+# Create the distribution
+echo "$DISTRIBUTION_CONFIG" > /tmp/cf-config.json
+
+DISTRIBUTION_ID=$(aws cloudfront create-distribution \
+    --distribution-config file:///tmp/cf-config.json \
+    --query 'Distribution.Id' \
+    --output text)
+
+echo ""
+echo "Distribution created!"
+echo "Distribution ID: $DISTRIBUTION_ID"
+echo ""
+
+# Wait for distribution to be deployed
+echo "Waiting for distribution to deploy (this may take a few minutes)..."
+aws cloudfront wait distribution-deployed --id $DISTRIBUTION_ID
+echo "✓ Distribution deployed successfully!"
+echo ""
+
+# Get distribution domain
+DISTRIBUTION_DOMAIN=$(aws cloudfront get-distribution \
+    --id $DISTRIBUTION_ID \
+    --query 'Distribution.DomainName' \
+    --output text)
+
+echo "Distribution Domain: $DISTRIBUTION_DOMAIN"
+echo ""
+
+# Save distribution info
+cat >> bucket-config.env << EOF
+
+# CloudFront Configuration
+DISTRIBUTION_ID=$DISTRIBUTION_ID
+DISTRIBUTION_DOMAIN=$DISTRIBUTION_DOMAIN
+CF_URL=https://$DISTRIBUTION_DOMAIN
+EOF
+
+echo "Configuration updated in bucket-config.env"
+echo ""
+echo "================================================"
+echo "✓ CloudFront setup completed!"
+echo "================================================"
+echo ""
+echo "Your website is now available at:"
+echo "https://$DISTRIBUTION_DOMAIN"
+echo ""
+echo "To add a custom domain:"
+echo "1. Add CNAME record pointing to: $DISTRIBUTION_DOMAIN"
+echo "2. Request ACM certificate for your domain"
+echo "3. Update distribution with certificate and custom domain"
+echo ""
+
+rm -f /tmp/cf-config.json

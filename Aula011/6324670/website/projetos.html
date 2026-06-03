@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeria de projetos - Portfólio profissional">
+    <meta name="keywords" content="projetos, portfolio, desenvolvedor, aws">
+    <title>Projetos - Portfólio Profissional</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">P</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Início</a></li>
+                <li><a href="projetos.html" class="nav-link active">Projetos</a></li>
+                <li><a href="experiencia.html" class="nav-link">Experiência</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Projects Section -->
+    <section class="projects">
+        <div class="container">
+            <h1>Meus Projetos</h1>
+            <p class="section-subtitle">Conheça alguns dos projetos que desenvolvemos ao longo da carreira</p>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="aws">AWS</button>
+                <button class="filter-btn" data-filter="full-stack">Full Stack</button>
+                <button class="filter-btn" data-filter="frontend">Frontend</button>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card" data-category="aws">
+                    <div class="project-image">
+                        <img src="images/project-1.webp" alt="Plataforma E-commerce em AWS" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Plataforma E-commerce Escalável</h3>
+                        <p>Plataforma de e-commerce construída com Node.js, React e AWS, suportando milhões de transações.</p>
+                        <div class="project-tags">
+                            <span class="tag">AWS S3</span>
+                            <span class="tag">Lambda</span>
+                            <span class="tag">DynamoDB</span>
+                            <span class="tag">React</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card" data-category="full-stack">
+                    <div class="project-image">
+                        <img src="images/project-2.webp" alt="Sistema de Gerenciamento de Projetos" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Sistema de Gerenciamento de Projetos</h3>
+                        <p>Aplicação web para gerenciamento de projetos com recursos colaborativos em tempo real.</p>
+                        <div class="project-tags">
+                            <span class="tag">Vue.js</span>
+                            <span class="tag">Node.js</span>
+                            <span class="tag">MongoDB</span>
+                            <span class="tag">WebSocket</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card" data-category="frontend">
+                    <div class="project-image">
+                        <img src="images/project-3.webp" alt="Dashboard Analytics Interativo" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Dashboard Analytics Interativo</h3>
+                        <p>Dashboard de análise de dados com visualizações interativas e tempo real com WebSockets.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Chart.js</span>
+                            <span class="tag">D3.js</span>
+                            <span class="tag">TypeScript</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="project-card" data-category="aws">
+                    <div class="project-image">
+                        <img src="images/project-4.webp" alt="API REST Serverless" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>API REST Serverless Escalável</h3>
+                        <p>API RESTful serverless com Lambda, API Gateway e DynamoDB na AWS, 100% escalável.</p>
+                        <div class="project-tags">
+                            <span class="tag">AWS Lambda</span>
+                            <span class="tag">API Gateway</span>
+                            <span class="tag">DynamoDB</span>
+                            <span class="tag">Python</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 5 -->
+                <div class="project-card" data-category="full-stack">
+                    <div class="project-image">
+                        <img src="images/project-5.webp" alt="Plataforma Edutech" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Plataforma Edutech Completa</h3>
+                        <p>Plataforma de educação online com cursos, videoaulas, quizzes e certificados digitais.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">Express</span>
+                            <span class="tag">PostgreSQL</span>
+                            <span class="tag">Stripe</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 6 -->
+                <div class="project-card" data-category="frontend">
+                    <div class="project-image">
+                        <img src="images/project-6.webp" alt="Website Corporativo" loading="lazy">
+                        <div class="project-overlay">
+                            <a href="#" class="project-link">Ver Detalhes</a>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3>Website Corporativo Responsivo</h3>
+                        <p>Website corporativo com design moderno, otimizado para SEO e performance máxima.</p>
+                        <div class="project-tags">
+                            <span class="tag">HTML5</span>
+                            <span class="tag">CSS3</span>
+                            <span class="tag">JavaScript</span>
+                            <span class="tag">SEO</span>
+                        </div>
+                        <div class="project-footer">
+                            <a href="#" class="project-btn">GitHub</a>
+                            <a href="#" class="project-btn">Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html">Projetos</a></li>
+                    <li><a href="experiencia.html">Experiência</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conecte-se</h4>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informações</h4>
+                <p>Email: seu.email@exemplo.com</p>
+                <p>Local: São Paulo, Brasil</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Seu Nome. Todos os direitos reservados. | Hospedado em AWS S3 + CloudFront</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+    <script src="js/projects-filter.js" defer></script>
+</body>
+</html>

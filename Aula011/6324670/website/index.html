@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfólio profissional - Desenvolvedor Full Stack com expertise em AWS Cloud">
+    <meta name="keywords" content="desenvolvedor, portfólio, AWS, cloud, web">
+    <meta name="author" content="Seu Nome">
+    <meta property="og:title" content="Portfólio Profissional">
+    <meta property="og:description" content="Desenvolvedor Full Stack - AWS Expert">
+    <meta property="og:type" content="website">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
+    
+    <title>Portfólio Profissional - Desenvolvedor Full Stack</title>
+    <link rel="canonical" href="https://seu-portfolio.com/">
+    <link rel="icon" type="image/png" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='50' font-size='90' fill='%234A90E2'>P</text></svg>">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="index.html">P</a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Início</a></li>
+                <li><a href="projetos.html" class="nav-link">Projetos</a></li>
+                <li><a href="experiencia.html" class="nav-link">Experiência</a></li>
+                <li><a href="contato.html" class="nav-link">Contato</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Olá, sou um Desenvolvedor Full Stack</h1>
+            <p class="subtitle">Especializado em soluções cloud com AWS, arquitetura escalável e experiência em todo o stack tecnológico</p>
+            <div class="hero-buttons">
+                <a href="projetos.html" class="btn btn-primary">Ver Projetos</a>
+                <a href="contato.html" class="btn btn-secondary">Entre em Contato</a>
+            </div>
+            <div class="social-links">
+                <a href="#" aria-label="LinkedIn" class="social-icon">in</a>
+                <a href="#" aria-label="GitHub" class="social-icon">gh</a>
+                <a href="#" aria-label="Twitter" class="social-icon">tw</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="skills">
+        <div class="container">
+            <h2>Competências Técnicas</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Frontend</h3>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript ES6+</li>
+                        <li>React & Vue.js</li>
+                        <li>Responsive Design</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Backend</h3>
+                    <ul>
+                        <li>Node.js</li>
+                        <li>Python</li>
+                        <li>APIs RESTful</li>
+                        <li>Microserviços</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Cloud & DevOps</h3>
+                    <ul>
+                        <li>AWS S3, EC2, Lambda</li>
+                        <li>CloudFront CDN</li>
+                        <li>Docker & Kubernetes</li>
+                        <li>CI/CD Pipelines</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Databases</h3>
+                    <ul>
+                        <li>PostgreSQL</li>
+                        <li>MongoDB</li>
+                        <li>DynamoDB</li>
+                        <li>Redis</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Pronto para começar um novo projeto?</h2>
+            <p>Vamos transformar suas ideias em realidade com tecnologia de ponta</p>
+            <a href="contato.html" class="btn btn-primary">Iniciar uma Conversa</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Navegação</h4>
+                <ul>
+                    <li><a href="index.html">Início</a></li>
+                    <li><a href="projetos.html">Projetos</a></li>
+                    <li><a href="experiencia.html">Experiência</a></li>
+                    <li><a href="contato.html">Contato</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Conecte-se</h4>
+                <ul>
+                    <li><a href="#">LinkedIn</a></li>
+                    <li><a href="#">GitHub</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Informações</h4>
+                <p>Email: seu.email@exemplo.com</p>
+                <p>Local: São Paulo, Brasil</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Seu Nome. Todos os direitos reservados. | Hospedado em AWS S3 + CloudFront</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js" defer></script>
+</body>
+</html>

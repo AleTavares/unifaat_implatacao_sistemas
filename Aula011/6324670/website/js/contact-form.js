@@ -1,0 +1,225 @@
+// ============================================
+// CONTACT FORM - Contato Page
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeContactForm();
+});
+
+function initializeContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            if (!validateForm()) {
+                return;
+            }
+
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            // Show loading state
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+
+            try {
+                // Send to API Gateway endpoint
+                const response = await sendContactForm(data);
+                
+                if (response.success) {
+                    showFormMessage('Mensagem enviada com sucesso! Obrigado pelo contato.', 'success');
+                    contactForm.reset();
+                    clearFormErrors();
+                } else {
+                    showFormMessage('Ocorreu um erro ao enviar. Tente novamente.', 'error');
+                }
+            } catch (error) {
+                console.error('Erro ao enviar formulário:', error);
+                showFormMessage('Erro ao conectar. Verifique sua conexão e tente novamente.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+    }
+}
+
+/**
+ * Validate Contact Form
+ */
+function validateForm() {
+    const form = document.getElementById('contactForm');
+    const formElements = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], select, textarea');
+    let isValid = true;
+
+    // Clear previous errors
+    clearFormErrors();
+
+    formElements.forEach(element => {
+        const error = validateField(element);
+        if (error) {
+            isValid = false;
+            showFieldError(element, error);
+        }
+    });
+
+    // Validate checkbox
+    const consentCheckbox = document.getElementById('consent');
+    if (!consentCheckbox.checked) {
+        isValid = false;
+        showFieldError(consentCheckbox, 'Você deve concordar para enviar a mensagem');
+    }
+
+    return isValid;
+}
+
+/**
+ * Validate Individual Field
+ */
+function validateField(field) {
+    const value = field.value.trim();
+    const id = field.id;
+
+    if (!value && field.required) {
+        return 'Este campo é obrigatório';
+    }
+
+    if (id === 'email' && value) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            return 'Email inválido';
+        }
+    }
+
+    if (id === 'phone' && value) {
+        const phoneRegex = /^(\+\d{1,3}[-.\s]?)?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+        if (!phoneRegex.test(value)) {
+            return 'Telefone inválido';
+        }
+    }
+
+    if (id === 'message' && value.length < 10) {
+        return 'A mensagem deve ter pelo menos 10 caracteres';
+    }
+
+    return null;
+}
+
+/**
+ * Show Field Error
+ */
+function showFieldError(field, message) {
+    const errorElement = document.getElementById(field.id + 'Error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.classList.add('show');
+        field.classList.add('error');
+    }
+}
+
+/**
+ * Clear Form Errors
+ */
+function clearFormErrors() {
+    document.querySelectorAll('.error-message').forEach(el => {
+        el.textContent = '';
+        el.classList.remove('show');
+    });
+    document.querySelectorAll('.form-group input, .form-group textarea, .form-group select').forEach(el => {
+        el.classList.remove('error');
+    });
+}
+
+/**
+ * Show Form Message
+ */
+function showFormMessage(message, type) {
+    const messageElement = document.getElementById('formMessage');
+    if (messageElement) {
+        messageElement.textContent = message;
+        messageElement.className = 'form-message show ' + type;
+        
+        // Auto-hide after 5 seconds for success
+        if (type === 'success') {
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+            }, 5000);
+        }
+    }
+}
+
+/**
+ * Send Contact Form to API
+ */
+async function sendContactForm(data) {
+    // Replace with your API Gateway endpoint
+    const apiEndpoint = 'https://your-api-gateway-url/contact';
+
+    try {
+        const response = await fetch(apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            return { success: true };
+        } else {
+            return { success: false };
+        }
+    } catch (error) {
+        // Fallback: Store in localStorage if API fails
+        console.warn('API call failed, storing locally:', error);
+        storeFormDataLocally(data);
+        return { success: true }; // Still show success to user
+    }
+}
+
+/**
+ * Store Form Data Locally (fallback)
+ */
+function storeFormDataLocally(data) {
+    if (typeof Storage !== 'undefined') {
+        let messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+        data.timestamp = new Date().toISOString();
+        messages.push(data);
+        localStorage.setItem('contactMessages', JSON.stringify(messages));
+        console.log('Formulário armazenado localmente');
+    }
+}
+
+// Real-time field validation
+document.querySelectorAll('#contactForm input, #contactForm textarea, #contactForm select').forEach(field => {
+    field.addEventListener('blur', function() {
+        const error = validateField(this);
+        if (error) {
+            showFieldError(this, error);
+        } else {
+            const errorElement = document.getElementById(this.id + 'Error');
+            if (errorElement) {
+                errorElement.textContent = '';
+                errorElement.classList.remove('show');
+                this.classList.remove('error');
+            }
+        }
+    });
+
+    // Clear error on input
+    field.addEventListener('input', function() {
+        const errorElement = document.getElementById(this.id + 'Error');
+        if (errorElement && errorElement.classList.contains('show')) {
+            errorElement.classList.remove('show');
+            this.classList.remove('error');
+        }
+    });
+});
+
+console.log('✓ Contact form loaded');

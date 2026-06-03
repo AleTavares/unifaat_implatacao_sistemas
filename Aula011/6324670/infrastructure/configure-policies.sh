@@ -1,0 +1,185 @@
+#!/bin/bash
+
+# ============================================
+# AWS S3 Policies - Configure Permissions
+# ============================================
+
+set -e
+
+echo "================================================"
+echo "Configuring S3 and CloudFront Policies"
+echo "================================================"
+
+# Load bucket configuration
+if [ ! -f "bucket-config.env" ]; then
+    echo "Error: bucket-config.env not found!"
+    exit 1
+fi
+
+source bucket-config.env
+
+echo ""
+echo "Setting up policies for:"
+echo "Website Bucket: $WEBSITE_BUCKET"
+echo "Assets Bucket: $ASSETS_BUCKET"
+echo ""
+
+# ============================================
+# Website Bucket Policy
+# ============================================
+
+echo "Configuring website bucket policy..."
+
+WEBSITE_POLICY='{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::'$WEBSITE_BUCKET'/*",
+            "Condition": {
+                "StringEquals": {
+                    "AWS:SourceArn": "arn:aws:cloudfront::ACCOUNT_ID:distribution/'$DISTRIBUTION_ID'"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::'$WEBSITE_BUCKET'/*"
+        }
+    ]
+}'
+
+echo "$WEBSITE_POLICY" | aws s3api put-bucket-policy \
+    --bucket $WEBSITE_BUCKET \
+    --policy file:///dev/stdin
+
+# ============================================
+# Assets Bucket Policy - Restricted Access
+# ============================================
+
+echo "Configuring assets bucket policy..."
+
+ASSETS_POLICY='{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::ACCOUNT_ID:root"
+            },
+            "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::'$ASSETS_BUCKET'",
+                "arn:aws:s3:::'$ASSETS_BUCKET'/*"
+            ]
+        },
+        {
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:*",
+            "Resource": [
+                "arn:aws:s3:::'$ASSETS_BUCKET'",
+                "arn:aws:s3:::'$ASSETS_BUCKET'/*"
+            ],
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "false"
+                }
+            }
+        }
+    ]
+}'
+
+echo "$ASSETS_POLICY" | aws s3api put-bucket-policy \
+    --bucket $ASSETS_BUCKET \
+    --policy file:///dev/stdin
+
+# ============================================
+# Enable Server-Side Encryption
+# ============================================
+
+echo ""
+echo "Enabling encryption..."
+
+# Website bucket encryption
+aws s3api put-bucket-encryption \
+    --bucket $WEBSITE_BUCKET \
+    --server-side-encryption-configuration '{
+        "Rules": [
+            {
+                "ApplyServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                }
+            }
+        ]
+    }'
+
+# Assets bucket encryption
+aws s3api put-bucket-encryption \
+    --bucket $ASSETS_BUCKET \
+    --server-side-encryption-configuration '{
+        "Rules": [
+            {
+                "ApplyServerSideEncryptionByDefault": {
+                    "SSEAlgorithm": "AES256"
+                }
+            }
+        ]
+    }'
+
+# ============================================
+# Configure Headers for Security
+# ============================================
+
+echo "Setting up CloudFront cache behaviors with security headers..."
+
+# Note: This would typically be done through CloudFront Response Headers Policy
+# But for simplicity, we'll document the recommended headers
+
+echo ""
+echo "Recommended Security Headers to configure in CloudFront:"
+echo "- Strict-Transport-Security: max-age=31536000; includeSubDomains"
+echo "- X-Content-Type-Options: nosniff"
+echo "- X-Frame-Options: DENY"
+echo "- X-XSS-Protection: 1; mode=block"
+echo "- Referrer-Policy: strict-origin-when-cross-origin"
+
+# ============================================
+# Block Public Access - Double Check
+# ============================================
+
+echo ""
+echo "Verifying public access settings..."
+
+aws s3api put-public-access-block \
+    --bucket $WEBSITE_BUCKET \
+    --public-access-block-configuration \
+    "BlockPublicAcls=false,IgnorePublicAcls=false,BlockPublicPolicy=false,RestrictPublicBuckets=false"
+
+aws s3api put-public-access-block \
+    --bucket $ASSETS_BUCKET \
+    --public-access-block-configuration \
+    "BlockPublicAcls=true,IgnorePublicAcls=true,BlockPublicPolicy=true,RestrictPublicBuckets=true"
+
+echo ""
+echo "================================================"
+echo "✓ Policies configured successfully!"
+echo "================================================"
+echo ""
+echo "Security Configuration Summary:"
+echo "- Website bucket: Public access allowed (for CloudFront)"
+echo "- Assets bucket: Private (restricted access)"
+echo "- Encryption: Enabled on both buckets"
+echo "- HTTPS: Enforced through CloudFront"
+echo ""

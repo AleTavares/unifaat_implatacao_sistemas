@@ -1,0 +1,194 @@
+#!/bin/bash
+
+# ============================================
+# AWS Portfolio - Cleanup Script
+# ============================================
+
+set -e
+
+echo "================================================"
+echo "AWS Portfolio - Cleanup"
+echo "================================================"
+echo ""
+echo "WARNING: This will delete all resources!"
+echo "Make sure you have backups if needed."
+echo ""
+
+read -p "Are you sure? (type 'yes' to confirm): " confirm
+
+if [ "$confirm" != "yes" ]; then
+    echo "Cleanup cancelled."
+    exit 0
+fi
+
+# Load bucket configuration
+if [ ! -f "bucket-config.env" ]; then
+    echo "Error: bucket-config.env not found!"
+    exit 1
+fi
+
+source bucket-config.env
+
+echo ""
+echo "Starting cleanup process..."
+echo ""
+
+# ============================================
+# Delete CloudFront Distribution
+# ============================================
+
+if [ ! -z "$DISTRIBUTION_ID" ]; then
+    echo "Disabling CloudFront distribution: $DISTRIBUTION_ID"
+    
+    # Get current distribution config
+    aws cloudfront get-distribution-config \
+        --id $DISTRIBUTION_ID \
+        --query 'DistributionConfig' > /tmp/cf-config.json
+    
+    # Extract ETag
+    ETAG=$(aws cloudfront get-distribution-config \
+        --id $DISTRIBUTION_ID \
+        --query 'ETag' \
+        --output text)
+    
+    # Update config to disable
+    sed -i 's/"Enabled": true/"Enabled": false/' /tmp/cf-config.json
+    
+    # Update distribution
+    aws cloudfront update-distribution \
+        --id $DISTRIBUTION_ID \
+        --distribution-config file:///tmp/cf-config.json \
+        --if-match $ETAG || true
+    
+    echo "Waiting for distribution to disable..."
+    aws cloudfront wait distribution-deployed --id $DISTRIBUTION_ID || true
+    
+    echo "Deleting CloudFront distribution..."
+    aws cloudfront delete-distribution \
+        --id $DISTRIBUTION_ID \
+        --if-match $ETAG || true
+    
+    echo "✓ Distribution deleted"
+fi
+
+# ============================================
+# Empty and Delete S3 Buckets
+# ============================================
+
+for BUCKET in $WEBSITE_BUCKET $ASSETS_BUCKET $LOGGING_BUCKET; do
+    if [ ! -z "$BUCKET" ]; then
+        echo ""
+        echo "Processing bucket: $BUCKET"
+        
+        # Check if bucket exists
+        if aws s3 ls s3://$BUCKET 2>/dev/null; then
+            # Delete all versions
+            echo "Removing all object versions..."
+            aws s3api list-object-versions --bucket $BUCKET \
+                --query 'Versions[].[Key,VersionId]' \
+                --output text | while read -r KEY VERSION_ID; do
+                    if [ ! -z "$KEY" ]; then
+                        aws s3api delete-object --bucket $BUCKET --key "$KEY" --version-id "$VERSION_ID" || true
+                    fi
+                done
+            
+            # Delete delete markers
+            echo "Removing delete markers..."
+            aws s3api list-object-versions --bucket $BUCKET \
+                --query 'DeleteMarkers[].[Key,VersionId]' \
+                --output text | while read -r KEY VERSION_ID; do
+                    if [ ! -z "$KEY" ]; then
+                        aws s3api delete-object --bucket $BUCKET --key "$KEY" --version-id "$VERSION_ID" || true
+                    fi
+                done
+            
+            # Delete bucket
+            echo "Deleting bucket: $BUCKET"
+            aws s3api delete-bucket --bucket $BUCKET
+            echo "✓ Bucket deleted"
+        fi
+    fi
+done
+
+# ============================================
+# Cleanup Lambda Functions
+# ============================================
+
+echo ""
+echo "Cleaning up Lambda functions..."
+
+# Delete contact-form function
+aws lambda delete-function \
+    --function-name portfolio-contact-form 2>/dev/null || true
+
+# Delete image-processor function
+aws lambda delete-function \
+    --function-name portfolio-image-processor 2>/dev/null || true
+
+echo "✓ Lambda functions deleted"
+
+# ============================================
+# Cleanup API Gateway
+# ============================================
+
+echo ""
+echo "Cleaning up API Gateway..."
+
+# List and delete APIs
+API_IDS=$(aws apigateway get-rest-apis --query 'items[?name==`portfolio-api`].id' --output text)
+
+for API_ID in $API_IDS; do
+    echo "Deleting API: $API_ID"
+    aws apigateway delete-rest-api --rest-api-id $API_ID || true
+done
+
+echo "✓ API Gateway cleaned up"
+
+# ============================================
+# Cleanup DynamoDB Tables
+# ============================================
+
+echo ""
+echo "Cleaning up DynamoDB..."
+
+# Delete contacts table
+aws dynamodb delete-table \
+    --table-name portfolio-contacts 2>/dev/null || true
+
+echo "✓ DynamoDB cleaned up"
+
+# ============================================
+# Cleanup IAM Roles
+# ============================================
+
+echo ""
+echo "Cleaning up IAM roles..."
+
+# Note: This is a manual step as it requires careful handling
+
+echo "Manual step: Delete the following IAM roles if created:"
+echo "- portfolio-lambda-role"
+echo "- portfolio-api-role"
+
+# ============================================
+# Final Cleanup
+# ============================================
+
+echo ""
+echo "Removing local configuration..."
+rm -f bucket-config.env
+rm -f /tmp/cf-config.json
+
+echo ""
+echo "================================================"
+echo "✓ Cleanup completed!"
+echo "================================================"
+echo ""
+echo "Remaining cleanup items:"
+echo "1. Delete CloudWatch log groups manually (if needed)"
+echo "2. Delete IAM roles and policies"
+echo "3. Check CloudTrail logs"
+echo "4. Verify no remaining resources in AWS Console"
+echo ""
+echo "Cost verification: Check AWS Billing console"
+echo ""
