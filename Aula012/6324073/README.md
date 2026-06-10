@@ -180,18 +180,18 @@ aws ecr describe-images \
 |---|---|---|
 | `evidencias/01-aws-configure-list.txt` | `aws configure list` | Credenciais AWS configuradas (chaves ocultadas) |
 | `evidencias/02-ecr-login.txt` | `aws ecr get-login-password \| docker login` | Resultado do login com mensagem `Login Succeeded` |
-| `evidencias/03-docker-build.txt` | `docker build -t web-app-v1:v1 .` | Saída do build com `Successfully built` |
-| `evidencias/04-ecr-create-repo.txt` | `aws ecr create-repository` | JSON de criação do repositório com `repositoryUri` |
-| `evidencias/05-ecr-describe-repos.txt` | `aws ecr describe-repositories` | Confirmação do repositório existente na região |
-| `evidencias/06-docker-tag.txt` | `docker tag web-app-v1:v1 <REPO_URI>:v1` | Comando de tagging sem erros |
-| `evidencias/07-docker-images.txt` | `docker images \| grep <REPO_URI>` | Imagem local com URI completo do ECR |
-| `evidencias/08-docker-push.txt` | `docker push <REPO_URI>:v1` | Upload dos layers com digest SHA256 |
-| `evidencias/09-ecr-describe-images.txt` | `aws ecr describe-images` | Tag `v1` confirmada no registry remoto |
+| `evidencias/03-docker-build.txt` | `docker build -t web-app-v1:V1.0 .` | Saída do build mostrando download e extração dos layers do `nginx:alpine` e geração da imagem final |
+| `evidencias/04-ecr-create-repo.txt` | `aws ecr create-repository` | JSON de criação do repositório com `repositoryUri`: `395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend` |
+| `evidencias/05-ecr-describe-repos.txt` | `aws ecr describe-repositories` | Confirmação do repositório `app-frontend` existente na região `us-east-1` |
+| `evidencias/06-docker-tag.txt` | `docker tag web-app-v1:V1.0 <REPO_URI>:V1.0` | Comando de tagging executado sem erros |
+| `evidencias/07-docker-images.txt` | `docker images \| grep <REPO_URI>` | Imagem `395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend:V1.0` listada localmente (62.3MB) |
+| `evidencias/08-docker-push.txt` | `docker push <REPO_URI>:V1.0` | Upload de 9 layers para o ECR com digest `sha256:1ddf2888...` |
+| `evidencias/09-ecr-describe-images.txt` | `aws ecr describe-images` | Tag `V1.0` confirmada no registry remoto |
 
 ### Observações sobre a Execução
 
-- Comandos executados em ambiente Linux (WSL2 Ubuntu 24.04) com Docker Desktop integrado.
+- Comandos executados em WSL2 Ubuntu 24.04 com Docker Desktop 28.5.1 integrado via WSL integration.
+- Região usada: `us-east-1` (conforme configuração da conta `aluno_unifaat`).
+- Nome do repositório ECR: `app-frontend` (conforme Lab012.md).
 - A autenticação no ECR usa token temporário de 12 horas gerado via `aws ecr get-login-password`; tokens expirados causam erro `no basic auth credentials` no push.
-- O comando `aws ecr create-repository` retorna erro `RepositoryAlreadyExistsException` se o repositório já existe — comportamento esperado, não é falha.
-- Layers de imagens Docker são enviados em paralelo; layers já presentes no ECR são pulados com `Layer already exists`, reduzindo tempo de push em re-deploys.
-- O bônus EKS não foi executado por ausência de cluster EKS ativo no ambiente de laboratório.
+- O bônus EKS (Seções 6–7) não foi executado — criação de cluster EKS gera custos por hora e requer VPC dedicada via CloudFormation.

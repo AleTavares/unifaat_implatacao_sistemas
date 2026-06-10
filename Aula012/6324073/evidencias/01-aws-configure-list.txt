@@ -1,0 +1,5 @@
+NAME       : VALUE                    : TYPE             : LOCATION
+profile    : <not set>                : None             : None
+access_key : ****************4DOJ     : shared-credentials-file : 
+secret_key : ****************Hv3M     : shared-credentials-file : 
+region     : us-east-1                : config-file      : ~/.aws/config
