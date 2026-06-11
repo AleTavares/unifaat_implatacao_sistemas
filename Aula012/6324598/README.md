@@ -96,7 +96,7 @@ docker push 123456789012.dkr.ecr.us-east-1.amazonaws.com/web-app-repo:v1
 
 ## Questão 6: Evidências Práticas da Execução do Lab012
 
-> O Lab012 foi executado com sucesso. Os prints estão na pasta [`prints/`](./prints) e a saída completa de todos os comandos está no arquivo [`evidencias.txt`](./evidencias.txt). Valores reais usados na execução:
+> O Lab012 foi executado com sucesso. Os prints de cada etapa estão na pasta [`prints/`](./prints). Valores reais usados na execução:
 >
 > - **ID da Conta AWS:** `646313139208`
 > - **Região:** `us-east-1`
