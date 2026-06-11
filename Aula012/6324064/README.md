@@ -97,3 +97,10 @@ Parametros fornecidos:
 - A regiao utilizada foi `us-east-1`.
 - Repositorio utilizado para evidencias reais: `506609161223.dkr.ecr.us-east-1.amazonaws.com/web-app-repo-6324064`.
 - Apos a coleta das evidencias, o repositorio ECR de laboratorio foi removido para evitar custo de armazenamento.
+
+## Checklist final da entrega
+- [x] Respostas teoricas preenchidas
+- [x] Simulacao de comandos da Questao 5 preenchida
+- [x] Evidencias de terminal (TXT) anexadas
+- [x] Evidencias em print (PNG) anexadas
+- [x] Evidencias do console AWS anexadas
