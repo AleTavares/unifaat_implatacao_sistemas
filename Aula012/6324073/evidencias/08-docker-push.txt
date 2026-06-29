@@ -1,0 +1,24 @@
+The push refers to repository [395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend]
+edd956c54638: Preparing
+5519239b187c: Preparing
+9a2cbc774b1f: Preparing
+ad8253b95bde: Preparing
+906af8ee0f8a: Preparing
+2d9b3b001567: Preparing
+2b05bd5bca95: Preparing
+b910427bd94b: Preparing
+29df493baa13: Preparing
+2b05bd5bca95: Waiting
+b910427bd94b: Waiting
+29df493baa13: Waiting
+2d9b3b001567: Waiting
+edd956c54638: Pushed
+906af8ee0f8a: Pushed
+9a2cbc774b1f: Pushed
+ad8253b95bde: Pushed
+2d9b3b001567: Pushed
+2b05bd5bca95: Pushed
+b910427bd94b: Pushed
+29df493baa13: Pushed
+5519239b187c: Pushed
+V1.0: digest: sha256:1ddf288811a93640049682efe70862471acfb5c3c546d643d5295d735a2eae89 size: 2196

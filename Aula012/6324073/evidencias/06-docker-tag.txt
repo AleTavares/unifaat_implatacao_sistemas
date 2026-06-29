@@ -1,0 +1,2 @@
+$ docker tag web-app-v1:V1.0 395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend:V1.0
+(sem saída = sucesso)

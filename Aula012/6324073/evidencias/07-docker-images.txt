@@ -1,0 +1,2 @@
+$ docker images | grep 395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend
+395103361437.dkr.ecr.us-east-1.amazonaws.com/app-frontend   V1.0      ec9908ecaa98   About a minute ago   62.3MB
